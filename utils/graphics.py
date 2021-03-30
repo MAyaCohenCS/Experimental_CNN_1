@@ -37,6 +37,7 @@ def plot_performance(perf_list, title, plotname, show=False, cols=1, rows=1):
         plt.show()
 
 #  usage example:
+# import utils.graphics as graphics
 # perfs = [graphics.Perf([10, 7, 3], [9, 4, 6], 'subtitle1')] *5
 # title = 'test'
 # plotname = 'test'
