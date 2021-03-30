@@ -39,15 +39,6 @@ classes = ('plane', 'car', 'bird', 'cat',
            'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
 
-# # get some random training images
-# dataiter = iter(trainloader)
-# images, labels = dataiter.next()
-#
-# # show images
-# imshow(torchvision.utils.make_grid(images))
-# # print labels
-# print(' '.join('%5s' % classes[labels[j]] for j in range(4)))
-
 # Define net architecture
 class Net(nn.Module):
     def __init__(self):
@@ -99,7 +90,7 @@ for epoch in range(2):  # loop over the dataset multiple times
 
 print('Finished Training')
 
-PATH = './cifar_net.pth'
+PATH = 'trained_models/cifar_net.pth'
 torch.save(net.state_dict(), PATH)
 
 dataiter = iter(testloader)
