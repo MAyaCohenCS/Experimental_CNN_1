@@ -10,7 +10,6 @@ import torchvision.transforms as transforms
 
 matplotlib.use('TkAgg')  # )
 
-
 def imshow(img):
     img = img / 2 + 0.5  # unnormalize
     npimg = img.numpy()
@@ -90,7 +89,7 @@ for epoch in range(2):  # loop over the dataset multiple times
 
 print('Finished Training')
 
-PATH = 'trained_models/cifar_net.pth'
+PATH = 'trained_models/tutorial_net.pth'
 torch.save(net.state_dict(), PATH)
 
 dataiter = iter(testloader)
