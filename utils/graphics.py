@@ -1,6 +1,28 @@
 import matplotlib.pyplot as plt
 import math
 
+'''
+How to use graphics module:
+1) import it:
+# import utils.graphics as grph
+
+2) initialize it. pick a general title for the plot:
+# perf = grph.Perf(desc='super_title')
+
+3) initialize a session. (AKA pick a title for the current subplot):
+# pref.new_session('subplot title')
+
+4) collect data. attach a new single measurement to your active session:
+# perf.read_data_point(train_data_point, test_data_point)
+
+* repeat (3), (4) as much as you like
+
+5) print graphics! it will be automatically saved to doc\figures as well, 
+so pick a meaningful filename for it. file suffix (.png) is automatically generated.
+if you add the 'show=True' flag it will also pop out when it's ready:
+# pref.plot_performance('filename', show=True)
+'''
+
 TRAIN_COLOR = '#4D5E76'
 TEST_COLOR = '#ECCA50'
 
@@ -65,9 +87,4 @@ class Perf:
         if show:
             plt.show()
 
-#  usage example:
-# import utils.graphics as graphics
-# perfs = [graphics.Perf([10, 7, 3], [9, 4, 6], 'subtitle1')] *5
-# title = 'test'
-# plotname = 'test'
-# graphics.plot_performance(perfs, title, plotname, True, cols=5)
+
