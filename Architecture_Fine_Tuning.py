@@ -29,9 +29,6 @@ testset = torchvision.datasets.CIFAR10(root='./data', train=False,
 testloader = torch.utils.data.DataLoader(testset, batch_size=4,
                                          shuffle=True, num_workers=1)
 
-classes = ('plane', 'car', 'bird', 'cat',
-           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
-
 
 # Define net architecture.
 # convolutions kernel size and first FC layer size as parameters
@@ -106,7 +103,6 @@ def train(model, perf_logger):
 
 kernel_sizes = [3, 5, 7, 9, 11]
 FC1_sizes = [15, 30, 70, 100, 200]
-perf_sampling_rate = 500
 
 # start conv fine tuning
 graph_title = 'Test and train loss across training procces, according to kernel size in net architecture '

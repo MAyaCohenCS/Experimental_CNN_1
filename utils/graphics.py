@@ -17,7 +17,7 @@ How to use graphics module:
 
 * repeat (3), (4) as much as you like
 
-5) print graphics! it will be automatically saved to doc\figures as well, 
+5) print graphics! it will be automatically saved to doc/figures/raw as well, 
 so pick a meaningful filename for it. file suffix (.png) is automatically generated.
 if you add the 'show=True' flag it will also pop out when it's ready:
 # pref.plot_performance('filename', show=True)
@@ -83,7 +83,7 @@ class Perf:
                 handles, labels = ax_i.get_legend_handles_labels()
                 fig.legend(handles, labels, loc='right')
 
-        plt.savefig('./doc/figures/' + filename)
+        plt.savefig('./doc/figures/raw/' + filename)
         if show:
             plt.show()
 
