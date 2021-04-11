@@ -119,5 +119,5 @@ fc_pref = grph.Perf(desc=graph_title)  # initialize performance logger
 for fc_size in FC1_sizes:
     net = DynamicNet(fc_layer_size=fc_size)
     conv_pref.new_session('FC1 size edge: '+str(fc_size))
-    train(net, conv_pref)
+    train(net, fc_pref)
 conv_pref.plot_performance('fc_fine_tuning', show=False)
