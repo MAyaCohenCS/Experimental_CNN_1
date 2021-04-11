@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import math
+import pickle
 
 '''
 How to use graphics module:
@@ -75,7 +76,7 @@ class Perf:
             ax_i.plot(train_data, label='Train', color=TRAIN_COLOR)
             ax_i.plot(test_data, label='Test', color=TEST_COLOR)
             ax_i.set_title(self.subtitles[i])
-            ax_i.set(xlabel='train progress (batch number)', ylabel='Loss')
+            ax_i.set(xlabel='train progress \n(batch number)', ylabel='Loss')
             ax_i.label_outer()
             ax_i.set_box_aspect(1)
 
@@ -84,6 +85,12 @@ class Perf:
                 fig.legend(handles, labels, loc='right')
 
         plt.savefig('./doc/figures/raw/' + filename)
+
+        # pref object for later use (graphics corrections, etc.)
+        perf_backup = open('./doc/figures/raw_data/' + filename + '.pickle', 'wb')
+        pickle.dump(self, perf_backup)
+        perf_backup.close()
+
         if show:
             plt.show()
 

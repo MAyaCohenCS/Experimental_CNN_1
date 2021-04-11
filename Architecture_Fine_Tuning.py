@@ -101,23 +101,23 @@ def train(model, perf_logger):
     print('Finished Training')
 
 
-kernel_sizes = [3, 5, 7, 9, 11]
+kernel_sizes = [3, 5, 7, 9]
 FC1_sizes = [15, 30, 70, 100, 200]
 
 # start conv fine tuning
-graph_title = 'Test and train loss across training procces, according to kernel size in net architecture '
+graph_title = 'Test and train loss across training procces, \naccording to kernel size in net architecture '
 conv_pref = grph.Perf(desc=graph_title)  # initialize performance logger
 for conv_ker_size in kernel_sizes:
     net = DynamicNet(conv_layer_size=conv_ker_size)  # initialize net
     conv_pref.new_session('ker edge: '+str(conv_ker_size))  # initialize data series on performance logger
     train(net, conv_pref)
-conv_pref.plot_performance('conv_fine_tuning', show=True)
+conv_pref.plot_performance('conv_fine_tuning', show=False)
 
 # start FC fine tuning
-graph_title = 'Test and train loss across training procces, according to first FC size in net architecture '
+graph_title = 'Test and train loss across training procces, \naccording to first FC size in net architecture '
 fc_pref = grph.Perf(desc=graph_title)  # initialize performance logger
 for fc_size in FC1_sizes:
     net = DynamicNet(fc_layer_size=fc_size)
     conv_pref.new_session('FC1 size edge: '+str(fc_size))
     train(net, conv_pref)
-conv_pref.plot_performance('fc_fine_tuning', show=True)
+conv_pref.plot_performance('fc_fine_tuning', show=False)
