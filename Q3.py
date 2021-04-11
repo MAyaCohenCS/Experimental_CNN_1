@@ -6,15 +6,27 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+
 W = 32
 H = 32
 PATH = 'trained_models/cifar_net.pth'
 PATH_default = 'trained_models/cifar_net.pth'
 PATH_q3 = 'trained_models/cifar_net3.pth'
 PATH_q4 = 'trained_models/cifar_net4.pth'
+
+
 def get_permutation(w,h):
+    '''
+    get an index premutation for a h*w array
+    :param w: widht of the array
+    :param h: hight of the array
+    :return: a tensor of indices indicating a permutation
+    '''
     length = w * h
-    return torch.randperm(length*3)
+    r = torch.randperm(length)
+    g = torch.add(r, length)
+    b = torch.add(g, length)
+    return torch.cat((r, g, b))
 
 
 def imshow(img):
@@ -27,7 +39,7 @@ def imshow(img):
 class Net(nn.Module):
     """Copy the neural network from the Neural Networks section before and modify
     it to take 3-channel images
-    (instead of 1-channel images as it was defined"""
+    (instead of 1-channel images as it was defined)"""
     def __init__(self):
         super(Net, self).__init__()
         self.conv1 = nn.Conv2d(3, 6, 5)
@@ -48,6 +60,9 @@ class Net(nn.Module):
 
 
 class OurTransforms:
+    '''
+    a class that holds transforms that shuffle and reshiffle images
+    '''
     def __init__(self, q_3 = False,q_4=False):
         self._shuffle = q_3 or q_4
         self.reshuffle = q_4
@@ -59,11 +74,13 @@ class OurTransforms:
         self.idx_permute = get_permutation(W, H)
 
     def shuffle_img(self, img):
+        '''randomly reshuffle the spatial locations of pixels in the image'''
         if self.reshuffle: # Q4: no special structure
             self.reset_permutation()
         return img.view(-1)[self.idx_permute].view(3, W, H)
 
     def get_transform(self):
+        '''get the relevent transform'''
         # shuffling receptive field
         if self._shuffle:
             return transforms.Compose(
@@ -117,10 +134,11 @@ def train_net(net, trainloader):
 
             # print statistics
             running_loss += loss.item()
+            '''
             if i % 2000 == 1999:  # print every 2000 mini-batches
                 print('[%d, %5d] loss: %.3f' %
                       (epoch + 1, i + 1, running_loss / 2000))
-                running_loss = 0.0
+                running_loss = 0.0'''
     print('Finished Training')
     torch.save(net.state_dict(), PATH)
     print(PATH)
@@ -145,7 +163,7 @@ def display_some_images(loader):
 
 def initially_test_network(test_loader):
     """
-    display some randome images and see how the network classifies them
+    display some random images and see how the network classifies them
     :param test_loader:
     """
     #  Let us display an image from the test set to get familiar:
@@ -156,7 +174,7 @@ def initially_test_network(test_loader):
     outputs = net(images)
     _, predicted = torch.max(outputs, 1)
 
-    print('Predicted:\t', ' '.join('%5s' % classes[predicted[j]]
+    print('Predicted:\n', ' '.join('%5s' % classes[predicted[j]]
                                   for j in range(4)))
 
 
@@ -204,6 +222,12 @@ def test_class_performance(testloader):
 
 
 def test_locality(q_3=False, q_4=False):
+    '''
+    test how changes in localiy affect the performance of the NN
+    :param q_3: if Q3 we will shuffle the images once
+    :param q_4: if Q4 we will shuffle the images everytime its read
+    :return: the image loaders
+    '''
     # 1 Loading and normalizing CIFAR10:
     trainloader, testloader = init_loaders(q_3, q_4)
     global PATH
@@ -215,14 +239,6 @@ def test_locality(q_3=False, q_4=False):
         PATH = PATH_default
     # * Let us show some of the training images, for fun:
     display_some_images(trainloader)
-    return trainloader, testloader
-
-
-if __name__ == '__main__':
-    classes = ('plane', 'car', 'bird', 'cat',
-               'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
-
-    trainloader, testloader = test_locality(False, False)
     # 2 Define a Convolutional Neural Network:
     our_net = Net()
     # 3 Define a Loss function and optimizepr and 4 Train the network:
@@ -233,3 +249,13 @@ if __name__ == '__main__':
     test_network(testloader)
     # what are the classes that performed well, and the classes that did not perform well?
     test_class_performance(testloader)
+    return trainloader, testloader
+
+
+if __name__ == '__main__':
+    classes = ('plane', 'car', 'bird', 'cat',
+               'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+    test_locality()
+    test_locality(q_3=True)
+    test_locality(q_4=True)
+
